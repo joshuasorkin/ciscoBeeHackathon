@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+//global variables
+
+var apiKey='AIzaSyDB8GQeCMAItWN2H-sop_tv6b61EPI8h5M';
+</script>
+
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDB8GQeCMAItWN2H-sop_tv6b61EPI8h5M"></script>
+
+
+
+<script>
+function initialize() {
+
+  var latLong={lat:36.0851696,lng:-115.1829873};
+	
+  var mapProp = {
+    center:latLong,
+    zoom:10,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  var marker = new google.maps.Marker({
+          position: latLong,
+          map: map,
+          title: 'Hello World!'
+        });
+  
+  
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+
+<body>
+<div id="googleMap" style="width:500px;height:380px;"></div>
+</body>
+
+</html>
