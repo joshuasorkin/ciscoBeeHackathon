@@ -25,10 +25,24 @@ switch (modeLower){
 }
 
 function testCall(network){
-	call("+15105753138", {
+	//call_noCallerID("+15105753138",network);
+	//call_callerID("+15105753138",network);
+	call_noCallerID("+13053428488",network);
+}
+
+function call_callerID(phNum,network){
+	call(phNum, {
 		network:network,
 		callerID:'18005555338'
 	});
+	
+}
+
+function call_noCallerID(phNum,network){
+	call(phNum, {
+		network:network
+	});
+	
 }
 
 function smsNotify(){
