@@ -9,7 +9,20 @@
 <script src="https://cdn.rawgit.com/relayr/browser-sdk/master/build/relayr-browser-sdk.min.js" charset="utf-8"></script>
 
 <script>
-				
+	
+function detectBrowser() {
+  var useragent = navigator.userAgent;
+  var mapdiv = document.getElementById("googleMap");
+
+  if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+    mapdiv.style.width = '100%';
+    mapdiv.style.height = '100%';
+  } else {
+    mapdiv.style.width = '600px';
+    mapdiv.style.height = '800px';
+  }
+}
+	
 function getRelayrData(deviceId,token,map){
 	requestURI="https://api.relayr.io/devices/"+deviceId+"/readings";
 	$.ajax({
@@ -59,6 +72,7 @@ function getAudioData(deviceId,token,latLong,map){
 
 
 function initialize() {
+	//detectBrowser();
 	var latLongCenter={lat:36.0851696,lng:-115.1829873};
 	var map=initMap(latLongCenter);
 	getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
@@ -120,14 +134,16 @@ function getWeather(map,latLong,content){
 
 }
 
+
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 
 </script>
 </head>
 
 <body>
-<div id="googleMap" style="width:500px;height:380px;"></div>
+<div id="googleMap" style="width:1000px;height:1000px;"></div>
 </body>
 
 </html>
