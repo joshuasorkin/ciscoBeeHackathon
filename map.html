@@ -5,12 +5,15 @@
 
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDB8GQeCMAItWN2H-sop_tv6b61EPI8h5M"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script src="https://developer.relayr.io/relayr-browser-sdk.min.js"></script>
+<!--<script src="https://developer.relayr.io/relayr-browser-sdk.min.js"></script>-->
+<script src="https://cdn.rawgit.com/relayr/browser-sdk/master/build/relayr-browser-sdk.min.js" charset="utf-8"></script>
 
 <script>
 
-//getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
-//				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',map);
+//getAudioData('f1c46277-a3cb-4dc0-af13-df03466a3b74',
+//				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',null);
+//throw new Error('that is the end');
+				
 function getRelayrData(deviceId,token,map){
 	requestURI="https://api.relayr.io/devices/"+deviceId+"/readings";
 	$.ajax({
@@ -25,8 +28,10 @@ function getRelayrData(deviceId,token,map){
 					if(element.meaning=="location"){
 						latitude=element.value.latitude;
 						longitude=element.value.longitude;
-						latLong={latitude,longitude};
-						initMarker(map,latLong,"bees bees bees");
+						latLong={lat:latitude,lng:longitude};
+						getAudioData('f1c46277-a3cb-4dc0-af13-df03466a3b74',
+									'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',latLong,map);
+						
 					}
 				});
 			}
@@ -35,28 +40,31 @@ function getRelayrData(deviceId,token,map){
 }
 
 
+function getAudioData(deviceId,token,latLong,map){
+	requestURI="https://api.relayr.io/devices/"+deviceId+"/readings";
+	$.ajax({
+		url:requestURI,
+			type:"GET",
+			beforeSend:function(xhr){
+				xhr.setRequestHeader("Content-Type","application/json");
+				xhr.setRequestHeader("Authorization",token)
+			},
+			success:function(data){
+				//console.log(JSON.stringify(data));
+				//return;
+				volume=data.readings[0].value;
+				marker=initMarker(map,latLong,"<div>volume: "+volume+"<br />bees bees bees</div>");
+			}
+	});
+}
+
+
+
 function initialize() {
 	var latLongCenter={lat:36.0851696,lng:-115.1829873};
 	var map=initMap(latLongCenter);
 	getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
 				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',map);
-	
-  
-  
-  /*
-  var marker = new google.maps.Marker({
-		  position: latLong,
-		  map: map,
-		  title: 'Hello World!'
-		});
-	marker.addListener('click', function() {
-		  //map.setZoom(10);
-		  //map.setCenter(marker.getPosition());
-		  var infowindow=new google.maps.InfoWindow();
-		  infowindow.setContent('bees bees bees');
-		  infowindow.open(map,marker);
-		});
-	*/
   
   
 }
@@ -67,11 +75,12 @@ function initMarker(map,latLong,content){
 		  map: map,
 		  title: 'Marker title here'
 		});
-	marker.addListener('click', function() {
+	listenerHandle=marker.addListener('click', function() {
 		  var infowindow=new google.maps.InfoWindow();
 		  infowindow.setContent(content);
 		  infowindow.open(map,marker);
 		});
+	return marker;
 }
 
 function initMap(latLong){
