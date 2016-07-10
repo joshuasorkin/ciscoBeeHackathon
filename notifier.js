@@ -11,8 +11,9 @@ switch (mode)
 
 function testCall(network){
 	call("+15105753138", {
-	   network:network}
-	   callerID:'18005555338');
+		network:network,
+		callerID:'18005555338'
+	});
 }
 
 function smsNotify(){
