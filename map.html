@@ -8,10 +8,9 @@
 <script src="https://developer.relayr.io/relayr-browser-sdk.min.js"></script>
 
 <script>
-latLongCenter={lat:36.0851696,lng:-115.1829873};
-map=initMap();
-getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
-				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',map);
+
+//getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
+//				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',map);
 function getRelayrData(deviceId,token,map){
 	requestURI="https://api.relayr.io/devices/"+deviceId+"/readings";
 	$.ajax({
@@ -36,10 +35,13 @@ function getRelayrData(deviceId,token,map){
 }
 
 
-function initialize(latLongCenter) {
-
-  //var latLong={lat:36.0851696,lng:-115.1829873};
-  var map=initMap(latLongCenter);
+function initialize() {
+	var latLongCenter={lat:36.0851696,lng:-115.1829873};
+	var map=initMap(latLongCenter);
+	getRelayrData('b721c76a-3e67-4913-92b2-0f303bd81a15',
+				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',map);
+	
+  
   
   /*
   var marker = new google.maps.Marker({
@@ -83,6 +85,7 @@ function initMap(latLong){
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
 
 </script>
 </head>
