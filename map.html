@@ -9,10 +9,6 @@
 <script src="https://cdn.rawgit.com/relayr/browser-sdk/master/build/relayr-browser-sdk.min.js" charset="utf-8"></script>
 
 <script>
-
-//getAudioData('f1c46277-a3cb-4dc0-af13-df03466a3b74',
-//				'Bearer 1dVN.F0UySj_a5kVltaTb3Qg57M-I5wV',null);
-//throw new Error('that is the end');
 				
 function getRelayrData(deviceId,token,map){
 	requestURI="https://api.relayr.io/devices/"+deviceId+"/readings";
@@ -53,6 +49,8 @@ function getAudioData(deviceId,token,latLong,map){
 				//console.log(JSON.stringify(data));
 				//return;
 				volume=data.readings[0].value;
+				markerData={"volume":volume};
+				getWeather(map,latLong,markerData);
 				marker=initMarker(map,latLong,"<div>volume: "+volume+"<br />bees bees bees</div>");
 			}
 	});
@@ -69,7 +67,7 @@ function initialize() {
   
 }
 
-function initMarker(map,latLong,content){
+function initMarker(map,latLong,markerData){
 	var marker = new google.maps.Marker({
 		  position: latLong,
 		  map: map,
@@ -77,11 +75,22 @@ function initMarker(map,latLong,content){
 		});
 	listenerHandle=marker.addListener('click', function() {
 		  var infowindow=new google.maps.InfoWindow();
+		  content=formatMarkerData(markerData);
 		  infowindow.setContent(content);
 		  infowindow.open(map,marker);
 		});
 	return marker;
 }
+
+function formatMarkerData(markerData){
+	output="";
+	$.each(markerData,function(index,element){
+		output+=index+": "+element+"<br />";
+	});
+	output="<div>"+output+"</div>";
+	return output;
+}
+
 
 function initMap(latLong){
 	var mapProp = {
@@ -91,6 +100,24 @@ function initMap(latLong){
 	};
 	var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 	return map;
+}
+
+function getWeather(map,latLong,content){
+	lat=latLong.lat;
+	lng=latLong.lng;
+	requestURI="http://api.wunderground.com/api/910ab645c61b9d85/geolookup/conditions/q/"+lat+","+lng+".json";
+	$.ajax({
+		url:requestURI,
+			type:"GET",
+			success:function(data){
+				temperature=data.current_observation.temperature_string;
+				humidity=data.current_observation.relative_humidity;
+				markerData.temperature=temperature;
+				markerData.humidity=humidity;
+				marker=initMarker(map,latLong,markerData);
+			}
+	});
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
