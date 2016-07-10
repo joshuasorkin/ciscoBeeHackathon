@@ -1,9 +1,10 @@
-/*
 call("+15105753138", {
-   network:"SMS"});
-say("Your beehive is in danger!");
-*/
+   network:"SMS"}
+   callerID:'18005555338');
+say("Your beehive is in danger! Visit hyperspacecraft.net/beeApp/map.html for details.");
 
+
+/*
 result = ask("Your beehive is under attack!  Will you help or run away?", {
    choices:"help, run away"
 });
@@ -17,3 +18,4 @@ else if (result.value=="run away"){
 else {
 	say("I did not understand your command.");
 }
+*/
