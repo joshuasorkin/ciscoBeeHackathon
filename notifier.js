@@ -1,6 +1,21 @@
 var modeLower=mode.toLowerCase();
-switch (mode)
-{
+var situationLower=situation.toLowerCase();
+var alertMessage;
+switch(situationLower){
+	case 'moved':
+		alertMessage="Someone has moved the hive!";
+		break;
+	case 'quiet':
+		alertMessage="The hive is too quiet!";
+		break;
+	default:
+		alertMessage="The hive is in danger!";
+		break;
+	
+}
+
+
+switch (modeLower){
 	case 'sms':
 		smsNotify();
 		break;
@@ -18,12 +33,12 @@ function testCall(network){
 
 function smsNotify(){
 	testCall("SMS");
-	say("Your beehive is in danger! Visit hyperspacecraft.net/beeApp/map.html for details.");
+	say(alertMessage+" Visit hyperspacecraft.net/beeApp/map.html for details.");
 }
 
 function voiceNotify(){
 	testCall("PSTN");
-	result = ask("Your beehive is under attack!  Will you help or run away?", {
+	result = ask(alertMessage+" Will you help or run away?", {
 	   choices:"help, run away"
 	});
 
