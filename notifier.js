@@ -9,14 +9,19 @@ switch (mode)
 		break;
 }
 
-function smsNotify(){
+function testCall(network){
 	call("+15105753138", {
-	   network:"SMS"}
+	   network:network}
 	   callerID:'18005555338');
+}
+
+function smsNotify(){
+	testCall("SMS");
 	say("Your beehive is in danger! Visit hyperspacecraft.net/beeApp/map.html for details.");
 }
 
 function voiceNotify(){
+	testCall("PSTN");
 	result = ask("Your beehive is under attack!  Will you help or run away?", {
 	   choices:"help, run away"
 	});
